@@ -1,0 +1,20 @@
+stead:
+  description: >
+    STEAD is the primary dataset used in this dissertation.
+    It contains three-channel seismic waveform data sampled at 100 Hz
+    and is used for model training and initial evaluation.
+  sampling_rate: 100
+  channels: 3
+  format: HDF5
+
+usgs:
+  description: >
+    USGS seismic waveform data is used for cross-dataset evaluation
+    and regression experiments to assess domain generalization.
+  format: HDF5
+
+myanmar:
+  description: >
+    A regional Myanmar seismic dataset is used as the target domain
+    for domain adaptation and final evaluation.
+  format: HDF5

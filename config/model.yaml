@@ -1,0 +1,16 @@
+model:
+  name: CNN-based EEW model
+  input_type: spectrogram
+  input_shape: [3, 128, 128]
+
+training:
+  optimizer: Adam
+  learning_rate: 0.001
+  batch_size: 32
+  epochs: 50
+  loss_function: CrossEntropyLoss
+
+domain_adaptation:
+  enabled: true
+  source_domain: STEAD
+  target_domain: Myanmar
