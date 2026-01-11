@@ -20,7 +20,7 @@ def make_spec_from_waveform(x, fs=100, size=128, **kwargs):
     - make_spec_from_waveform(x, sampling_rate=100)
     """
 
-    # --- allow older code that passes sampling_rate= ---
+    
     if "sampling_rate" in kwargs and kwargs["sampling_rate"] is not None:
         try:
             fs = float(kwargs["sampling_rate"])
@@ -31,7 +31,7 @@ def make_spec_from_waveform(x, fs=100, size=128, **kwargs):
     # ---- core logic (robust) ----
     x = np.nan_to_num(np.array(x, dtype=np.float32))
 
-    # Ensure we end up with shape (T, 3)
+
     if x.ndim == 1:
         # (T,) -> (T,1)
         x = x[:, None]
@@ -47,16 +47,16 @@ def make_spec_from_waveform(x, fs=100, size=128, **kwargs):
     elif x.shape[1] > 3:
         x = x[:, :3]
 
-    # per-channel mean removal (same as your original)
+    # per-channel mean removal 
     x = x - x.mean(axis=0, keepdims=True)
 
-    # USE THE AUTOTUNED PARAMS (your original choices)
+   
     base_nperseg = 129
-    base_noverlap = base_nperseg // 2
+    base_noverlap = base_nperseg 
     mode     = "magnitude"
     scaling  = "density"
     detrend  = "constant"
-    norm     = "per_channel"  # or "global"
+    norm     = "per_channel"  
 
     chans = []
     for ch in range(3):
@@ -106,3 +106,4 @@ def make_spec_from_waveform(x, fs=100, size=128, **kwargs):
         spec = (spec - m) / s
 
     return spec
+
