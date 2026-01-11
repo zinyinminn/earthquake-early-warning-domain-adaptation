@@ -14,13 +14,13 @@ adaptation techniques.
 ## Project Overview
 
 Earthquake Early Warning systems require rapid and reliable inference from
-seismic waveform data. Models trained on data from one region often perform
-poorly when applied to data from different geographical regions.
+seismic waveform data. Models trained on data from one geographical region often
+perform poorly when applied to data from different regions.
 
 This project addresses this challenge by:
 - Training deep learning models using the STEAD dataset
-- Evaluating generalization across multiple seismic datasets
-- Applying domain adaptation to regional seismic data
+- Evaluating model generalization across multiple seismic datasets
+- Applying domain adaptation techniques to regional seismic data
 - Demonstrating a prototype real-time EEW system
 
 ---
@@ -40,17 +40,40 @@ The following datasets are used in this project:
   Used as the target domain for domain adaptation and final evaluation.
 
 > **Note:**  
-> Datasets are not included in this repository. Scripts for downloading and
-> preprocessing the data are provided in `src/data_processing/`.
+> Datasets are not included in this repository due to their size and licensing
+> restrictions. Scripts for downloading and preprocessing the data are provided
+> in `src/data_processing/`.
 
 ---
 
 ## Repository Structure
 
 The repository is organised into directories for data processing, training,
-evaluation, and utility functions.
+evaluation, and shared utility functions.
 
 ---
+
+## Configuration Files
+
+The `config/` directory contains:
+
+- `datasets.yaml` — dataset descriptions and metadata
+- `model.yaml` — model architecture and training parameters
+
+These files document the experimental setup used in the dissertation and allow
+experiments to be reproduced without modifying source code.
+
+---
+
+## Requirements
+
+The project is implemented in Python.
+
+Install dependencies using:
+
+```bash
+pip install -r requirements.txt
+
 
 ## Dissertation Context
 
