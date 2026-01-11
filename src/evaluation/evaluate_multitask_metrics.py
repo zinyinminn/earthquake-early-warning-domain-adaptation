@@ -1,4 +1,4 @@
-# evaluate_multitask_metrics.py — robust evaluator for multitask model
+
 import os, json, numpy as np, pandas as pd, torch, torch.nn as nn
 from torch.utils.data import DataLoader, Dataset
 from sklearn.metrics import (
@@ -9,13 +9,12 @@ import h5py
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-# --------- PATHS (edit if needed) ----------
+
 CSV = r"D:\datasets\stead_subset\subset_mt.csv"         # works with sp/sp_sec, dist/dist_km, label/label_eq...
 H5  = r"D:\datasets\stead_subset\subset.hdf5"
 MODEL_PATH = r"C:\Users\USER\eew\models\multitask_v1\mt_v1.pt"
 OUT_DIR = os.path.join(os.path.dirname(MODEL_PATH), "eval"); os.makedirs(OUT_DIR, exist_ok=True)
 
-# If your distance head was trained on log1p(distance), set True to invert with expm1
 DIST_WAS_LOG1P = True
 
 # --------- PREPROCESS (match training) -----
@@ -251,3 +250,4 @@ resid_hist(sp_true,   sp_pred,   "S–P residuals (s)",       os.path.join(OUT_D
 resid_hist(dist_true, dist_pred, "Distance residuals (km)", os.path.join(OUT_DIR,"resid_dist.png"))
 resid_hist(mag_true,  mag_pred,  "Magnitude residuals",     os.path.join(OUT_DIR,"resid_mag.png"))
 print("Saved residual plots in:", OUT_DIR)
+
