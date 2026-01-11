@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader, Subset
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 
-# ---- Your paths -------------------------------------------------------------
+
 CSV_BASE   = r"D:\datasets\stead_subset\subset.csv"       # original subset (for H5Dataset order)
 CSV_MT     = r"D:\datasets\stead_subset\subset_mt.csv"    # labels with sp/dist/mag
 H5         = r"D:\datasets\stead_subset\subset.hdf5"
@@ -33,7 +33,6 @@ NUM_WORKERS = 0
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# ---- Data: use your streaming HDF5 Dataset (spec, label) -------------------
 from dataloader_h5 import H5Dataset  # uses your wf_to_spec internally and returns (tensor, label)
 
 base_ds = H5Dataset(CSV_BASE, H5)             # (spec: torch.FloatTensor [3,128,128], label: tensor int64)
@@ -239,3 +238,4 @@ print("\nTEST  acc={:.3f}  P={:.3f}  R={:.3f}  F1={:.3f}".format(te_acc, te_p, t
 print("\nSaved:")
 print(" - best model :", BEST_PATH)
 print(" - log json   :", LOG_JSON)
+
