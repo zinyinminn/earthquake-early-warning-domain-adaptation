@@ -30,12 +30,11 @@ PRETRAINED_PATHS = [
 
 SEED         = 42
 EPOCHS       = 30
-EARLY_STOP   = 5          # stop if no val improvement for N epochs
+EARLY_STOP   = 5          
 BATCH        = 64
-LR           = 1e-4       # Lower LR for fine-tuning
-NUM_WORKERS  = 0          # increase if disk is fast
-PRINT_EVERY  = 50         # batch-interval to print LR on tqdm bar
-
+LR           = 1e-4       
+NUM_WORKERS  = 0         
+PRINT_EVERY  = 50        
 # -------------------- DATA ----------------------
 print("Creating dataloaders...")
 train_loader, val_loader, test_loader, class_weights = create_myanmar_dataloaders(
@@ -48,8 +47,8 @@ train_loader, val_loader, test_loader, class_weights = create_myanmar_dataloader
     random_state=SEED,
     mode="spec",          # Use spectrograms
     bandpass=(1.0, 20.0), # Bandpass filter
-    z_only=False,         # Use all 3 channels
-    return_meta=False     # Don't return metadata for training
+    z_only=False,         
+    return_meta=False    
 )
 
 # -------------------- MODEL ---------------------
@@ -353,4 +352,5 @@ print(f"Best model saved: {best_path}")
 print(f"Test F1 Score:    {test_f1:.4f}")
 print(f"Training log:     {log_csv}")
 print(f"Test metrics:     {os.path.join(OUT, 'test_metrics.json')}")
+
 print(f"\n✅ Myanmar CNN model ready for use in EEW demo!")
