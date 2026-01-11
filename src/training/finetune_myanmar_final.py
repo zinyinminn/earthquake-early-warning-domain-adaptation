@@ -1,8 +1,5 @@
 # finetune_myanmar_final.py
-"""
-Final training script to achieve >90% accuracy
-Combines: More data + Better augmentation + Improved training
-"""
+
 
 import os
 import json
@@ -18,7 +15,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 import h5py
 
-# Import your existing dataloader
+
 from myanmar_dataloader_h5 import MyanmarH5Dataset, wf_to_spec
 
 print("="*70)
@@ -520,4 +517,5 @@ def main():
     print(f"Results saved to: {os.path.join(OUTPUT_DIR, 'final_results.json')}")
 
 if __name__ == "__main__":
+
     main()
