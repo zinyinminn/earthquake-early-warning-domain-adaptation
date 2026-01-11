@@ -1,6 +1,6 @@
 # build_cross_dataset.py
-# Make a STEAD-like CSV + HDF5 from ANY catalog + waveform folder.
-# Robust to missing fields: never raises, fills with NaN / "" as needed.
+# Make a STEAD-like CSV + HDF5 from catalog + waveform folder.
+
 
 import os, glob
 import numpy as np
@@ -8,7 +8,7 @@ import pandas as pd
 import h5py
 from obspy import read
 
-# Your spectrogram helper
+
 from dataloader_h5 import wf_to_spec  # returns (3,128,128) from (T,3) waveform
 
 # ===================== CONFIG =====================
@@ -156,3 +156,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
