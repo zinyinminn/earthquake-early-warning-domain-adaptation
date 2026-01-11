@@ -9,7 +9,7 @@ from torch import nn
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 # ============================================================
-# 1. MODEL ARCHITECTURE (matches your trained checkpoint)
+# 1. MODEL ARCHITECTURE 
 # ============================================================
 class TinyCNNRegressor(nn.Module):
     def __init__(self, n_targets=5):
@@ -182,3 +182,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
