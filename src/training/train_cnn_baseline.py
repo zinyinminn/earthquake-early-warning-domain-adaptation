@@ -4,7 +4,7 @@ from torch.utils.data import DataLoader, Subset
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, precision_recall_fscore_support
 from tqdm import tqdm
-from dataloader_h5 import H5Dataset  # your streaming loader (returns spec [3,128,128], label)
+from dataloader_h5 import H5Dataset  
 
 # -------------------- CONFIG --------------------
 CSV = r"D:\datasets\stead_subset\subset.csv"
@@ -14,12 +14,11 @@ os.makedirs(OUT, exist_ok=True)
 
 SEED         = 42
 EPOCHS       = 20
-EARLY_STOP   = 5          # stop if no val improvement for N epochs
+EARLY_STOP   = 5          
 BATCH        = 64
 LR           = 2e-3
-NUM_WORKERS  = 0          # increase if disk is fast
-PRINT_EVERY  = 50         # batch-interval to print LR on tqdm bar
-
+NUM_WORKERS  = 0         
+PRINT_EVERY  = 50        
 # -------------------- DATA ----------------------
 df = pd.read_csv(CSV)
 y_all = (df["trace_category"].astype(str).str.lower().str.contains("earthquake")).astype(int).values
@@ -167,3 +166,4 @@ print("\nSaved:")
 print(" - best model:", best_path)
 print(" - logs CSV  :", log_csv)
 print(" - metrics   :", os.path.join(OUT, "metrics.json"))
+
