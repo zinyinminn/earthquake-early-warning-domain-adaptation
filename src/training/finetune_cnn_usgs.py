@@ -28,7 +28,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 from scipy.signal import spectrogram, butter, filtfilt
 
-# ================== PATHS (EDIT IF NEEDED) ==================
+# ================== PATHS  ==================
 ROOT = os.path.dirname(__file__)
 DATA_DIR = os.path.join(ROOT, "data")
 
@@ -338,3 +338,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
