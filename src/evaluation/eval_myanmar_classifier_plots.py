@@ -33,9 +33,7 @@ from sklearn.metrics import (
     classification_report,
 )
 
-# ---------------------------------------------------------------------
-# PATHS  (adjust if needed)
-# ---------------------------------------------------------------------
+
 CSV_PATH = r"D:\datasets\myanmar_eq\myanmar_full.csv"
 H5_PATH  = r"D:\datasets\myanmar_eq\myanmar_full.hdf5"
 CKPT     = r"D:\datasets\eew\models\myanmar_cnn_improved\cnn_myanmar_ft_improved.pt"
@@ -114,20 +112,7 @@ def collate(batch):
     return xb, yb
 
 
-# ---------------------------------------------------------------------
-# MODEL: must EXACTLY match the checkpoint architecture
-#
-# From your errors:
-#   features.0.weight: [32, 3, 3, 3]
-#   features.1.weight: [32]
-#   features.5.weight: [64, 32, 3, 3]
-#   features.6.weight: [64]
-#   features.10.weight: [128, 64, 3, 3]
-#   features.11.weight: [128]
-#
-# So we build conv+BN exactly at indices 0,1,5,6,10,11.
-# We insert nn.Identity() as "dummy" layers to align indices.
-# ---------------------------------------------------------------------
+
 class MyanmarCNN(nn.Module):
     def __init__(self, n_classes: int = 2):
         super().__init__()
@@ -171,9 +156,7 @@ class MyanmarCNN(nn.Module):
         return x
 
 
-# ---------------------------------------------------------------------
-# MAIN EVAL LOGIC
-# ---------------------------------------------------------------------
+
 def main():
     print("==============================================")
     print("MYANMAR CLASSIFIER EVALUATION + PLOTS")
@@ -354,3 +337,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
