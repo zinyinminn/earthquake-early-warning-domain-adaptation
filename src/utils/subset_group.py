@@ -9,8 +9,8 @@ os.makedirs(OUT_DIR, exist_ok=True)
 CSV_SUB  = os.path.join(OUT_DIR, "subset.csv")
 H5_SUB   = os.path.join(OUT_DIR, "subset.hdf5")
 
-# Choose target count. ~180k ≈ ~30GB, ~280k ≈ ~50GB (rough, depends on compression).
-TARGET_TRACES = 180_000   # change to 280_000 if you want ~50GB
+# Choose target count. ~180k
+TARGET_TRACES = 180_000  
 
 ID_COL    = "trace_name"
 LABEL_COL = "trace_category"
@@ -57,3 +57,4 @@ pick.to_csv(CSV_SUB, index=False)
 
 size_gb = os.path.getsize(H5_SUB) / (1024**3)
 print(f"DONE. Subset HDF5 ≈ {size_gb:.1f} GB at {H5_SUB}")
+
