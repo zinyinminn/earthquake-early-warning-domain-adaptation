@@ -3,8 +3,8 @@ import torch
 import h5py
 import numpy as np
 
-MODEL_PATH = "model.pt"       # path to your trained model
-DATA_PATH = "test.h5"         # your real test dataset
+MODEL_PATH = "model.pt"       
+DATA_PATH = "test.h5"         
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # --- Load model ---
@@ -36,3 +36,4 @@ def get_real_prediction():
 
 if __name__ == "__main__":
     print(get_real_prediction())
+
