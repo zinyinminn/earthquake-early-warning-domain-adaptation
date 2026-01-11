@@ -9,7 +9,7 @@ from sklearn.metrics import confusion_matrix, precision_recall_fscore_support, a
 from scipy.signal import spectrogram, butter, filtfilt
 import matplotlib.pyplot as plt
 
-# -------------------- Paths: update if needed --------------------
+
 CKPT_CLS = r"C:\Users\USER\eew\models\cnn_baseline\cnn_baseline.pt"
 CKPT_REG = r"C:\Users\USER\eew\models\reg_only_v1\reg_only.pt"
 SCALERS  = r"C:\Users\USER\eew\models\reg_only_v1\scalers.json"
@@ -395,3 +395,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
