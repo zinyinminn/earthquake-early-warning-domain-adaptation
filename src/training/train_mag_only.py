@@ -1,5 +1,5 @@
 # train_mag_only.py  — Magnitude-only training (physics-informed)
-# Uses frozen regressor (S–P, Distance) predictions as inputs to the Mag head.
+# Uses frozen regressor (S-P, Distance) predictions as inputs to the Mag head.
 
 import os, json, time, math
 import numpy as np
@@ -11,7 +11,7 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 from sklearn.model_selection import train_test_split
 
-# -------------------- PATHS (edit if needed) ---------------------------------
+# -------------------- PATHS ---------------------------------
 CSV_BASE   = r"D:\datasets\stead_subset\subset.csv"            # same order as H5
 CSV_MT_FIX = r"D:\datasets\stead_subset\subset_mt_fixed.csv"   # preferred labels
 CSV_MT_FALLBACK = r"D:\datasets\stead_subset\subset_mt.csv"    # fallback labels
@@ -64,7 +64,7 @@ if "label_eq" in mt.columns:
 else:
     mask_eq = np.ones(len(mt), dtype=bool)
 
-# Also require finite mag labels
+
 mask_mag = np.isfinite(mt["mag"].astype(float)) if "mag" in mt.columns else np.zeros(len(mt), dtype=bool)
 idx_all = np.where(mask_eq & mask_mag)[0]
 
@@ -190,7 +190,7 @@ def run_epoch(dl, train=True):
 
         if train: opt.zero_grad(set_to_none=True)
         mag_pred = MAG(X, sp_hat, dk_hat)
-        loss_raw = huber(mag_pred, mag_true)           # [B]
+        loss_raw = huber(mag_pred, mag_true)           
         loss = (loss_raw * weights).mean()
         if train:
             loss.backward()
@@ -242,3 +242,4 @@ rmse_cal = float(np.sqrt(np.mean((y_h_cal - y_t)**2)))
 print(f"\nTEST (raw)  MAE={te_mae:.3f} RMSE={te_rmse:.3f}")
 print(f"TEST (cal.) MAE={mae_cal:.3f} RMSE={rmse_cal:.3f}")
 print("Saved:\n -", BEST_PT, "\n -", CALIB_JSON, "\n -", TRAIN_LOG)
+
