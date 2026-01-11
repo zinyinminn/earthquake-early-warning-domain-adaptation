@@ -1,12 +1,7 @@
 # build_usgs_reg_h5.py
-#
+
 # Build HDF5 of spectrograms for USGS regression dataset
-#   Input:
-#       C:\Users\USER\eew_demo\data\usgs_big_reg\usgs_regression.csv
-#       C:\Users\USER\eew_demo\data\usgs_big_reg\eq\USGS_EQ_*.mseed
-#   Output:
-#       C:\Users\USER\eew_demo\data\usgs_reg.hdf5
-#       (same CSV, just cleaned if needed)
+  
 
 import os
 import h5py
@@ -14,9 +9,9 @@ import numpy as np
 import pandas as pd
 from obspy import read
 
-from spec_utils import make_spec_from_waveform   # use your existing implementation
+from spec_utils import make_spec_from_waveform   
 
-# ---- paths (adjust if you moved things) -------------------------------------
+
 
 BASE_DIR   = r"C:\Users\USER\eew_demo\data\usgs_big_reg"
 CSV_IN     = os.path.join(BASE_DIR, "usgs_regression.csv")
@@ -28,7 +23,7 @@ os.makedirs(os.path.dirname(H5_OUT), exist_ok=True)
 
 FS = 100  # sampling rate your spectrograms expect
 
-# ---- helper -----------------------------------------------------------------
+
 
 def load_mseed(path):
     st = read(path)
@@ -41,7 +36,7 @@ def load_mseed(path):
         x = data
     return x
 
-# ---- main -------------------------------------------------------------------
+
 
 def main():
     if not os.path.exists(CSV_IN):
@@ -52,7 +47,7 @@ def main():
     df = pd.read_csv(CSV_IN)
     print(f"[INFO] usgs_regression.csv rows: {len(df)}")
 
-    # verify we have trace_name column
+  
     if "trace_name" not in df.columns:
         raise ValueError("CSV must contain a 'trace_name' column.")
 
@@ -69,12 +64,9 @@ def main():
             try:
                 wf = load_mseed(mseed_path)
 
-                # *** IMPORTANT CHANGE ***
-                # Call make_spec_from_waveform *without* the 'sampling_rate=' keyword
-                # so we don't need to change spec_utils.py.
+              
                 spec = make_spec_from_waveform(wf, FS)
-                # If your signature is make_spec_from_waveform(wf) only,
-                # then just do: spec = make_spec_from_waveform(wf)
+        
 
                 spec = np.asarray(spec, dtype=np.float32)
                 # ensure shape (3, 128, 128) or (C, H, W)
@@ -96,3 +88,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
