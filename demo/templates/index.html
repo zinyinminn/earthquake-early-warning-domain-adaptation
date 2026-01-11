@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>EEW Demo – Real-Time Earthquake Early Warning</title>
+
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}"
+  />
+
+  <!-- Leaflet -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-icon">!!</span>
+      <span class="brand-title">Earthquake Early Warning — Real-Time Demo</span>
+    </div>
+    <div class="topbar-buttons">
+      <button id="btnStart" class="btn-primary">Start Simulation</button>
+      <button id="btnStop" class="btn-secondary" disabled>Stop</button>
+      <button id="btnPerf" class="btn-secondary">Open Model Performance</button>
+      <button id="btnSound" class="btn-secondary">Sound Enabled ✓</button>
+    </div>
+  </header>
+
+  <!-- Alert banner -->
+<section id="alertBanner" class="alert-banner alert-safe">
+  <span id="alertMessage">‼ SAFE — Monitoring seismic activity…</span>
+  <span id="alertCountdown" class="alert-countdown"></span>
+</section>
+
+<!-- Dataset + User location row -->
+<section class="dataset-bar">
+  <div class="dataset-left">
+    <span class="dataset-label">Simulation dataset:</span>
+    <select id="datasetSelect" class="dataset-select">
+      <option value="STEAD">STEAD (main training dataset)</option>
+      <option value="MYANMAR">Myanmar (regional dataset)</option>
+
+      <option value="USGS_real">USGS (cross-dataset)</option>
+    </select>
+    <span class="dataset-hint">Affects stream + live & offline metrics</span>
+  </div>
+  <div class="dataset-right">
+    <label for="userLocation" class="label-inline">User location:</label>
+    <select id="userLocation">
+      <option value="16.8661,96.1951">Yangon, Myanmar</option>
+      <option value="21.9588,96.0891">Mandalay, Myanmar</option>
+      <option value="13.7563,100.5018">Bangkok, Thailand</option>
+      <option value="35.6895,139.6917">Tokyo, Japan</option>
+      <option value="37.7749,-122.4194">San Francisco, USA</option>
+      <option value="34.0522,-118.2437">Los Angeles, USA</option>
+    </select>
+  </div>
+</section>
+
+<!-- Epicenter line -->
+<section class="epi-row">
+  <div class="epi-right">
+    Epicenter:
+    <span id="placeName" class="epi-name">Unknown</span>
+  </div>
+</section>
+
+
+  <!-- Main layout -->
+  <main class="layout-grid">
+    <!-- Left: Map + log + waveform -->
+    <section class="left-panel">
+      <div id="map" class="map-container"></div>
+
+      <div class="status-bar">
+        Status: <span id="statusText">Stopped</span>
+        &nbsp;&nbsp;
+        Magnitude: <span id="mag">—</span>
+        &nbsp;&nbsp;
+        Distance to user (km): <span id="dist">—</span>
+        &nbsp;&nbsp;
+        ETA (s): <span id="eta">—</span>
+        &nbsp;&nbsp;
+        Latency (ms): <span id="latency">—</span>
+        &nbsp;&nbsp;
+        Intensity:
+        <span id="intensityBadge" class="badge badge-low">Low</span>
+      </div>
+
+      <section class="log-and-wave">
+        <div class="log-card">
+          <h2 class="section-title">Simulation Log</h2>
+          <div class="log-table-wrapper">
+            <table id="logTable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Mag</th>
+                  <th>Dist (km)</th>
+                  <th>ETA (s)</th>
+                  <th>Alert</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="waveform-card">
+          <h2 class="section-title">Waveform Preview (simulated)</h2>
+          <div class="waveform-window">
+            <canvas id="waveformCanvas" width="600" height="160"></canvas>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- Right: Performance -->
+    <aside class="right-panel hidden" id="perfPanel">
+      <h2 class="section-title">Model Performance</h2>
+
+      <table class="perf-table">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Dataset</td><td id="m_dataset_name">STEAD (main)</td></tr>
+
+          <tr><td>Accuracy (offline)</td><td id="m_accuracy">0.997</td></tr>
+          <tr><td>Precision (offline)</td><td id="m_precision">0.999</td></tr>
+          <tr><td>Recall (offline)</td><td id="m_recall">0.997</td></tr>
+          <tr><td>F1 (offline)</td><td id="m_f1">0.998</td></tr>
+
+          <tr><td>Accuracy (live)</td><td id="m_accuracy_live">—</td></tr>
+          <tr><td>Precision (live)</td><td id="m_precision_live">—</td></tr>
+          <tr><td>Recall (live)</td><td id="m_recall_live">—</td></tr>
+          <tr><td>F1 (live)</td><td id="m_f1_live">—</td></tr>
+
+          <tr><td>Mag RMSE (live)</td><td id="m_mag_rmse_live">—</td></tr>
+          <tr><td>Distance RMSE (live)</td><td id="m_dist_rmse_live">—</td></tr>
+          <tr><td>S–P RMSE (live)</td><td id="m_sp_rmse_live">—</td></tr>
+          <tr><td>Inference (ms)</td><td id="m_latency2">45</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="section-subtitle">Real-time Magnitude Timeline</h3>
+      <canvas id="chartMagTimeline"></canvas>
+    </aside>
+  </main>
+
+  <!-- Shake popup -->
+  <div id="shakePopup" class="shake-popup hidden">
+    <div id="shakeDetails">Level: —</div>
+  </div>
+
+  <!-- Audio: strong danger + soft warning -->
+  <audio
+    id="alertSoundDanger"
+    src="{{ url_for('static', filename='alert.mp3') }}"
+    preload="auto"
+  ></audio>
+
+  <audio
+    id="alertSoundWarning"
+    src="{{ url_for('static', filename='warning_soft.mp3') }}"
+    preload="auto"
+  ></audio>
+
+  <script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>
